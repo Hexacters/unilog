@@ -11,11 +11,11 @@ const KIOSK_LOG_FILE_PATH = "/Users/ramkishoremadheshwaran/Documents/unilog_view
 function readKioskLogFile() {
     return new Promise((resolve, reject) => {
         try {
-            fs.readFile(KIOSK_LOG_FILE_PATH, {encoding: 'utf-8'}, function (err, data) {
+            fs.readFile(KIOSK_LOG_FILE_PATH, { encoding: 'utf-8' }, function (err, data) {
                 if (!err) {
                     let responseObject = {
                         "updatedAt": new Date().toISOString(),
-                        "fileData": data,
+                        "fileData": data.split('\n').splice(data.split('\n').length - 100, data.split('\n').length).join('\n'),
                         "key": "Error Log",
                         "kioskId": os.hostname()
                     }
@@ -59,15 +59,15 @@ function writeKioskLogsToDb(payLoad) {
 function saveKioskLogs() {
     return new Promise(async (resolve, reject) => {
         try {
-                readKioskLogFile().then(payLoad => {
-                    writeKioskLogsToDb(payLoad).then(result => {
-                        console.log(`${payLoad["kioskId"]} KIOSK LOG Save Result ====== ${result}`);
-                    });
+            readKioskLogFile().then(payLoad => {
+                writeKioskLogsToDb(payLoad).then(result => {
+                    console.log(`${payLoad["kioskId"]} KIOSK LOG Save Result ====== ${result}`);
                 });
+            });
         } catch (e) {
             reject(e);
         }
     });
 }
 
-module.exports = {saveKioskLogs};
+module.exports = { saveKioskLogs };
