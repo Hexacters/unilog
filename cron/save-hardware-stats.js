@@ -2,7 +2,7 @@
  * @author Venkat
  */
 const os = require("os");
-
+const { exec } = require('child_process');
 let axios = require('axios');
 
 function saveHardwareStats() {

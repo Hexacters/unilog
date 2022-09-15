@@ -1,5 +1,6 @@
 /**
  * @author keerthi
+ * @author ramkishore
  */
 const os = require("os");
 let axios = require('axios');
@@ -37,7 +38,7 @@ function writeErrorLogsToDb(payLoad) {
 
         let config = {
             method: 'post',
-            url: 'http://localhost:3000/save/log',
+            url: 'https://unilog-server.herokuapp.com/save/log',
             headers: {
                 'Content-Type': 'application/json'
             },
