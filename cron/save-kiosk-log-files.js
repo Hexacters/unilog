@@ -5,13 +5,13 @@
 const os = require("os");
 let axios = require('axios');
 var fs = require('fs');
-const path = require('path');
 
-function readKioskLogFile(fileName) {
+const KIOSK_LOG_FILE_PATH = "/Users/ramkishoremadheshwaran/Documents/unilog_viewer/logs/log2.txt";
+
+function readKioskLogFile() {
     return new Promise((resolve, reject) => {
         try {
-            const filePath = path.join("../logs/kiosk-log", fileName);
-            fs.readFile(filePath, {encoding: 'utf-8'}, function (err, data) {
+            fs.readFile(KIOSK_LOG_FILE_PATH, {encoding: 'utf-8'}, function (err, data) {
                 if (!err) {
                     let responseObject = {
                         "updatedAt": new Date().toISOString(),
@@ -56,33 +56,14 @@ function writeKioskLogsToDb(payLoad) {
     });
 }
 
-function getKioskLogFileList() {
-    return new Promise((resolve, reject) => {
-        fs.readdir("../logs/kiosk-log", function (err, files) {
-            //handling error
-            if (err) {
-                reject('Unable to scan directory: ' + err);
-            }
-            resolve(files);
-        });
-    });
-}
-
-
 function saveKioskLogs() {
     return new Promise(async (resolve, reject) => {
         try {
-            let fileNameList = await getKioskLogFileList();
-            if (!fileNameList.length > 0) {
-                reject("FILE NAME LIST IS EMPTY");
-            }
-            fileNameList.forEach(fileName => {
-                readKioskLogFile(fileName).then(payLoad => {
+                readKioskLogFile().then(payLoad => {
                     writeKioskLogsToDb(payLoad).then(result => {
                         console.log(`${payLoad["kioskId"]} KIOSK LOG Save Result ====== ${result}`);
                     });
                 });
-            });
         } catch (e) {
             reject(e);
         }

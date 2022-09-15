@@ -19,7 +19,10 @@ function getSystemStats() {
         exec(`wmic path CIM_LogicalDevice where "Description like 'USB%'" get /value`, (err, stdout, stderr) => {
             if (err) {
                 resolve({
-                    "kioskId": os.hostname()
+                    "kioskId": os.hostname(),
+                    "thermal": false,
+                    "printer": false,
+                    "scanner": false
                 });
                 return;
             }

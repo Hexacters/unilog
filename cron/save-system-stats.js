@@ -27,7 +27,11 @@ function getSystemStats() {
                 memy.info().then(memory => {
                     usagePercentage["memory"] = memory;
                     osu.netstat.stats().then((s) => {
-                        usagePercentage.network = s.map(e => e.inputBytes).reduce((s, e) => +s + +e, 0);
+                        if (s && s.map) {
+                            usagePercentage.network = s.map(e => e.inputBytes).reduce((s, e) => +s + +e, 0);
+                        } else {
+                            usagePercentage.network = 0;
+                        }
                         resolve({
                             "kioskId": os.hostname(),
                             "systemUsage": usagePercentage
